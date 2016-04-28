@@ -10,7 +10,7 @@ module Rack
         end
         @limit  = options[:limit]
         @period = options[:period].respond_to?(:call) ? options[:period] : options[:period].to_i
-        @type   = options.fetch(:type, :throttle)
+        @type   = options.fetch(:type, :custom)
       end
 
       def cache
@@ -31,7 +31,7 @@ module Rack
           :period => current_period,
           :limit => current_limit
         }
-        (req.env['rack.attack.throttle_data'] ||= {})[name] = data
+        (req.env['rack.attack.custom_data'] ||= {})[name] = data
 
         (count > current_limit).tap do |throttled|
           if throttled

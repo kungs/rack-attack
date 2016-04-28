@@ -40,6 +40,7 @@ module Rack
             req.env['rack.attack.match_type']          = type
             req.env['rack.attack.match_data']          = data
             Rack::Attack.instrument(req)
+            BlackListIp.create(ip: discriminator, visit_limit: 0) if BlackListIp.find_by(ip: discriminator).blank?
           end
         end
       end

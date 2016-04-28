@@ -126,5 +126,6 @@ class Rack::Attack
   def_delegators self, :whitelisted?,
                        :blacklisted?,
                        :throttled?,
-                       :tracked?
+                       :tracked?,
+                       :customed?
 end

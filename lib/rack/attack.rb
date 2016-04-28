@@ -114,7 +114,7 @@ class Rack::Attack
       self.class.blacklisted_response.call(env)
     elsif throttled?(req)
       self.class.throttled_response.call(env)
-    elsif customed(req)
+    elsif customed?(req)
       BlackListIp.create(ip: discriminator, visit_limit: 0) if BlackListIp.find_by(ip: discriminator).blank?
     else
       tracked?(req)

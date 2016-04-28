@@ -115,8 +115,15 @@ class Rack::Attack
     elsif throttled?(req)
       self.class.throttled_response.call(env)
     elsif customed?(req)
-      real_ip = env['rack.attack.match_discriminator']
+      if req.env['HTTP_X_FORWARDED_FOR'].present?
+        ip = req.env['HTTP_X_FORWARDED_FOR'].strip.split(/[,\s]+/).first
+        real_ip = ip.present? ? ip : req.ip
+
+      else
+        real_ip = req.ip
+      end
       BlackListIp.create(ip: real_ip, visit_limit: 0) if BlackListIp.find_by(ip: real_ip).blank?
+
     else
       tracked?(req)
       @app.call(env)

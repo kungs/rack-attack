@@ -16,6 +16,7 @@ class Rack::Attack
   autoload :Fail2Ban,        'rack/attack/fail2ban'
   autoload :Allow2Ban,       'rack/attack/allow2ban'
   autoload :Request,         'rack/attack/request'
+  autoload :Custom,          'rack/attack/custom'
 
   class << self
 
@@ -37,10 +38,15 @@ class Rack::Attack
       self.tracks[name] = Track.new(name, options, block)
     end
 
+    def custom(name, options, &block)
+      self.customs[name] = Custom.new(name, options, block)
+    end
+
     def whitelists; @whitelists ||= {}; end
     def blacklists; @blacklists ||= {}; end
     def throttles;  @throttles  ||= {}; end
     def tracks;     @tracks     ||= {}; end
+    def customs;    @customs    ||= {}; end
 
     def whitelisted?(req)
       whitelists.any? do |name, whitelist|

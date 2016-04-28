@@ -39,9 +39,7 @@ module Rack
             req.env['rack.attack.match_discriminator'] = discriminator
             req.env['rack.attack.match_type']          = type
             req.env['rack.attack.match_data']          = data
-            #Rack::Attack.instrument(req)
-            b = BlackListIp.find_or_create_by(ip: discriminator)
-            b.update_attributes(visit_limit: 0)
+            Rack::Attack.instrument(req)
           end
         end
       end

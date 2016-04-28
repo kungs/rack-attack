@@ -72,6 +72,12 @@ class Rack::Attack
       end
     end
 
+    def customed?(req)
+      customs.each_value do |custom|
+        custom[req]
+      end
+    end
+
     def instrument(req)
       notifier.instrument('rack.attack', req) if notifier
     end
@@ -108,6 +114,8 @@ class Rack::Attack
       self.class.blacklisted_response.call(env)
     elsif throttled?(req)
       self.class.throttled_response.call(env)
+    elsif customed(req)
+      BlackListIp.create(ip: discriminator, visit_limit: 0) if BlackListIp.find_by(ip: discriminator).blank?
     else
       tracked?(req)
       @app.call(env)

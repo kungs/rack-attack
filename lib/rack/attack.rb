@@ -123,7 +123,7 @@ class Rack::Attack
         real_ip = req.ip
       end
       BlackListIp.create(ip: real_ip, visit_limit: 0) if BlackListIp.find_by(ip: real_ip).blank?
-
+      @app.call(env)
     else
       tracked?(req)
       @app.call(env)
